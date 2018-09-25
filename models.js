@@ -3,8 +3,6 @@ const db = new Sequelize('postgres://localhost:5432/plantr', {
   logging: false,
 });
 
-db.authenticate().then(() => console.log('connected'));
-
 const Gardener = db.define('gardeners', {
   name: {
     type: Sequelize.STRING,
@@ -23,7 +21,7 @@ const Plot = db.define('plots', {
   },
 });
 
-const Vegetable = db.define('vegetable', {
+const Vegetable = db.define('vegetables', {
   name: {
     type: Sequelize.STRING,
   },
@@ -35,9 +33,11 @@ const Vegetable = db.define('vegetable', {
   },
 });
 
+Vegetable.hasMany(Gardener);
+Gardener.belongsTo(Vegetable);
+
 Plot.belongsTo(Gardener);
-Gardener.hasOne(Plot);
-Gardener.belongsTo(Vegetable, { as: 'favorite_vegetable' });
+
 Vegetable.belongsToMany(Plot, { through: 'vegetable_plot' });
 Plot.belongsToMany(Vegetable, { through: 'vegetable_plot' });
 
