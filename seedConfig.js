@@ -29,11 +29,13 @@ const Vegetables = [
   ['Eggplant', 'Purple', randomDate()],
 ];
 
+// generate some random input for object instances
 const randomNumber = () => Math.floor(Math.random() * 11);
 const randomBool = () => Math.random() > 0.5;
 const veggieIndex = () => Math.floor(Math.random() * Vegetables.length);
 
-// Use function so we can call function.apply() with array of arguments
+// Use function to create object instances so we can call function.apply() with array of arguments
+
 // creates an instance of Gardener
 const createGardener = (name, age) => Gardener.create({ name, age });
 // creates and instance of Vegetable
@@ -45,11 +47,13 @@ module.exports.initializeGardenerPlotVegetable = () => {
   const gardeners = [];
   const plots = [];
   const vegetables = [];
+
   Gardeners.forEach(gardener => {
     gardeners.push(createGardener.apply(this, gardener));
     plots.push(Plot.create({ size: randomNumber(), shaded: randomBool() }));
     vegetables.push(createVegetable.apply(this, Vegetables[veggieIndex()]));
   });
+
   return Promise.all([
     Promise.all(gardeners),
     Promise.all(plots),
@@ -64,12 +68,15 @@ module.exports.initializeGardenerPlotVegetable = () => {
 // vegetable <=> plot
 module.exports.createGardenerVegetablePlotRelationship = data => {
   const [gardeners, plots, vegetables] = data;
+
   gardeners.forEach((gardener, i) => {
     let [plot, vegetable] = [plots[i], vegetables[i]];
+
     gardener.setVegetable(vegetable);
     plot.setGardener(gardener);
     plot.addVegetable(vegetable);
   });
+
   return plots;
 };
 
