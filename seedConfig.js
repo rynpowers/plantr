@@ -58,6 +58,7 @@ module.exports.initializeGardenerPlotVegetable = () => {
 };
 
 // sets relationships between each instance
+// Only including single vegetable to assign favorite vegetable to gardener
 // gardener => vegetable
 // plot => gardener
 // vegetable <=> plot
@@ -75,7 +76,9 @@ module.exports.createGardenerVegetablePlotRelationship = data => {
 // create 50 vegetables to seed the db
 module.exports.massCreateRandomVegetables = plots => {
   const promises = [Promise.resolve(plots)];
-  for (let i = 0; i < 50; i++) {
+  const length = Gardeners.length * 10;
+
+  for (let i = 0; i < length; i++) {
     promises.push(createVegetable.apply(this, Vegetables[veggieIndex()]));
   }
   return Promise.all(promises);
